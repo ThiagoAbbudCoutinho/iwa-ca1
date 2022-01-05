@@ -29,6 +29,7 @@ var coins = [
 //configure routes
 //root route/home
 app.get('/', function (req, res) {
+
   //remember after this line .send function then request is complete and cannot be further modified
   //NEVER forget to have last line of these functions as res.send, .end, .status().end i.e. always a method
   //that will end the request explicitly
@@ -71,6 +72,15 @@ app.post('/addCoin', (req, res)  => {
     } 
     if (req.query.coin.length > 3 ) {
         return res.status(400).json({ msg: 'Length of Coin Key must be a MAX of 3' });
+    } 
+
+    //to add a coin the endpoint must have security param too
+    //just for demo sake we are using same code
+    const key = req.query.key;
+
+    if(key !== 'OV£RK989L1'){
+        //send model to clienc
+        res.send('Supplied key in param was incorrect. Please try again')
     } 
 
     //check coin to be added
