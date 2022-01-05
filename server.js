@@ -99,6 +99,14 @@ app.post('/addCoin', (req, res)  => {
 // Method: DELETE
 //this equals to CREATION
 app.delete('/deleteCoin/:id', (req, res) => {
+    //if no security key supplied coin will NOT be deleted
+    const key = req.query.key;
+
+    if(key !== 'OV£RK989L1'){
+        //send model to clienc
+        res.send('Supplied key in param was incorrect. Please try again')
+    } 
+
         // Reading id from the URL
         const id = req.params.id;
         console.log(id)
