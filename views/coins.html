@@ -1,0 +1,102 @@
+<%- include('header.html') -%>
+
+<div class="container"> <button type="button" class="btn btn-default" aria-label="Left Align">
+  <span class="glyphicon glyphicon-align-left" aria-hidden="false"></span>
+</button> </div>
+
+
+
+
+<h1>Crypto </>CrudR< / > </h1>
+
+<br><br>
+Latest Crypto coins in the dashboard: 
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Key</th>
+      <th>DELETE</th>
+    </tr>
+  </thead>
+  <tbody id="users">
+    <% coins.forEach(function(coin){ %>
+        <tr>
+              <th scope="row" id="<%= coin.id %>"> <%= coin.id %> </th>
+              <th scope="row"> <div id="<%= coin.key %>" style="text-transform: uppercase;"><%= coin.key %></div>  </th>
+              <th scope="row">  <button type="button" onclick="deleteCoin('<%= coin.id %>');" class="btn btn-danger">X</button>  </th>
+        </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+  Add a new coin by inputting a coin key below - this must be 3 characters min and max. E.g. ETH or BTC.
+  Also they must not already exist in the db.
+
+  <form class="row g-3 needs-validation" validate>
+    
+    <div class="col-md-4 position-relative">
+      <label for="validationTooltipUsername" class="form-label">Coin key:</label>
+      <div class="input-group has-validation">
+        <input type="text" class="form-control" minlength="3" maxlength="4" id="validationTooltipUsername" aria-describedby="validationTooltipUsernamePrepend" required>
+        <div class="invalid-tooltip">
+          Please choose a unique and valid Crypto COIN Key.
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-12">
+      <button class="btn btn-primary" onclick="addCoin();" type="submit">Add coin</button>
+    </div>
+  </form>
+
+<br><br><br><br>
+
+  My app features a bunch of functionalities such as CRUD, validation ad sanitisation
+  <ul>
+    <li>CRUD - We create, read - list above is read from temp model, and delete data on Server side with the help of this client. We have also tested this as a  standalone api with Postman </li>
+    <li>Our data is stored as model. This technically is a js object embedded in an Array.</li>
+    <li>To aid for a clean UI we went for Bootstrap for the UI. From them we borrowed buttons, validations, tables and more!</li>
+    <li>Client side validation is enabled - we check user input has data and is of correct length, only accept non-empty submissions, and any coin entered in lower case we auto transform it with <strong> text-transform: uppercase</strong></li>
+    <li>If length is less than 2 front end displays msg and limited to 3 max. If both less than or greater 3 backend won't accept it.</li>
+    <li>server side we also sanitise the data and do</li>
+    <li>We even went a step further and did HTTP validation for an extra layer of security - if REST Method is wrong
+      then the call is rejected and also you cannot make calls unless you have a special key: <strong>OV£RK989L1</strong>
+    </li>
+    <li>To test the API and endpoints in isolation go ahead and in the POSTMAN or CURL either: /getCoins or /addCoin?coin=coinname or /deleteCoin/:id.
+      Remember addCoin and deleteCoin do not work in browser we cannot use unless we use postman, method in form.
+    </li>
+    
+    <li>In total for this project there were:</li>
+    <li> Github link: </li>
+  </ul>
+
+<script>
+addCoin = () => {
+  console.log('add coin method called')
+  let coinKey = document.getElementById("validationTooltipUsername").value;
+  console.log(coinKey)
+  //use xttp request process a REST request
+  if(coinKey === '') return null;
+  
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("POST", `http://localhost:3000/addCoin?coin=${coinKey}`, false);
+  xhttp.send();
+}
+
+deleteCoin = (id) => {
+    console.log('delete yes')
+    //alert user
+    alert('You are about to delete the coin ' + id)
+    //use xttp request process a REST request
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("DELETE", `http://localhost:3000/deleteCoin/${id}`, false);
+    xhttp.send();
+    // Reloading the page
+    location.reload();
+}
+
+</script>
+
+
+<%- include('footer.html') -%>
